@@ -1,15 +1,28 @@
-const rock = 0;
-const paper = 1;
-const scissor = 2;
+let choices = ("Rock", "Paper", "Scissor");
 
-let getComputerChoice = Math.floor(Math.random() * 3);
-if (getComputerChoice == 0) {
+function getComputerChoice() {}
+const randomNumber = Math.floor(Math.random() * 3) + 1;
+if (randomNumber === 1) {
   console.log("Rock");
-} else if (getComputerChoice == 1) {
+}
+if (randomNumber === 2) {
   console.log("Paper");
-} else if (getComputerChoice == 2) {
+}
+if (randomNumber === 3) {
   console.log("Scissor");
 }
-function getHumanChoice (prompt)
-     console.log("Rock");
-console.log(getHumanChoice)
+
+function getHumanChoice() {}
+let textInput = prompt("Please enter Rock, Paper or Scissors in text");
+if (textInput === null) {
+  console.log("Maybe try entering some text");
+}
+if (textInput === "Rock") {
+  console.log("You chose Rock!");
+}
+if (textInput === "Paper") {
+  console.log("You chose Paper!");
+}
+if (textInput === "Scissor") {
+  console.log("You chose Scissor!");
+}
