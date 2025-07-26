@@ -1,4 +1,6 @@
 const choices = ("rock", "paper", "scissor");
+const humanSelection = getHumanChoice();
+const computerSelection = getComputerChoice();
 
 function getComputerChoice() {}
 const randomNumber = Math.floor(Math.random() * 3) + 1;
