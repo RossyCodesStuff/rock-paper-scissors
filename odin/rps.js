@@ -1,86 +1,141 @@
-const getUserChoice = userInput => {
-    userInput = prompt("Please type in your choice of either 'rock', 'paper' or 'scissors")
-    userInput = userInput.toLowerCase();
-    if (userInput === 'rock' || userInput === 'paper' || userInput === 'scissors') {
-        return userInput;
+function computerPlay () {
+    let rock = "Rock";
+    let paper = "Paper";
+    let scissors = "Scissors";
+    let getRandomValue = Math.random();
+    if (getRandomValue <= 0.33) {
+        return rock;
+    } else if (getRandomValue <= 0.66) {
+        return paper;
     } else {
-        console.log("Error please type a selected reponse only.")
+        return scissors;
     }
-};
+}
 
-const getComputerChoice = () => {
-    const num = Math.floor(Math.random() * 3);
-    if (num === 0) {
-        return "rock"
-    } else if (num === 1) {
-        return 'paper'
-    } else if (num === 2) {
-        return 'scissors'
+    let playerWin = 0;
+    let computerWin = 0;
+    let gameWinner = "";    
+
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const playerSelection = button.className;
+        const computerChoice = computerPlay ();
+        battleWinText.textContent = (playRound(playerSelection, computerChoice));
+        playerWinText.textContent = "Your wins total: " + playerWin;
+        computerWinText.textContent = "The computers wins total: " + computerWin;
+        endGame();
+    })
+});
+
+function playRound(playerSelection, computerSelection) {
+    let tie = "It's a Tie! You chose: " + playerSelection + " And the Computer chose the same!";
+    let paperBeatRock = "You win! You selected: " + playerSelection + " And the computer chose: " + computerSelection;
+    let scissorsBeatPaper = "You win! You selected: " + playerSelection + " And the computer chose: " + computerSelection;
+    let scissorsBeatPaperLoss = "You Lose! You selected: " + playerSelection + " And the computer chose: " + computerSelection;
+    let paperBeatRockLoss = "You Lose! You selected: " + playerSelection + " And the computer chose: " + computerSelection;
+    let rockBeatScissors = "You win! You selected: " + playerSelection + " And the computer chose: " + computerSelection;
+    let rockBeatScissorsLoss = "You Lose! You selected: " + playerSelection + " And the computer chose: " + computerSelection;
+
+    if (playerSelection === computerSelection) {
+        return tie;
+    }else if ((playerSelection == "Paper") && (computerSelection == "Rock")) {
+        playerWin++
+        return paperBeatRock;
+    }else if ((playerSelection == "Rock") && (computerSelection == "Paper")) {
+        computerWin++
+        return paperBeatRockLoss;
+    }else if ((playerSelection == "Scissors") && (computerSelection == "Paper")) {
+        playerWin++
+        return scissorsBeatPaper;
+    }else if ((playerSelection == "Paper") && (computerSelection == "Scissors")) {
+        computerWin++
+        return scissorsBeatPaperLoss;
+    }else if ((playerSelection == "Rock") && (computerSelection == "Scissors")) {
+        playerWin++
+        return rockBeatScissors;
+    }else if ((playerSelection == "Scissors") && (computerSelection == "Rock")) {
+        computerWin++
+        return rockBeatScissorsLoss;
+    }else {
+        return "An Error in the code has occurred, how strange."
     }
-};
-let userScore = 0;
-let computerScore = 0;
-const determineWinner = (userChoice, computerChoice) => {
-    if (userChoice === 'bomb') {
-        return 'You blew up computer, obviously you win!'
-    };
-    if (userChoice === computerChoice) {
-        return "The game is a tie";
-    };
+}
 
-    if (userChoice === 'rock' && computerChoice === 'paper') {
-        computerScore++
-        return "The computer won!"
-    } else if (userChoice === 'paper' && computerChoice === 'rock') {
-        userScore++
-        return "You Won!"
-    };
 
-    if (userChoice === 'scissors' && computerChoice === 'rock') {
-        computerScore++
-        return "The computer won!"
-    } else if (userChoice === 'rock' && computerChoice === 'scissors') {
-        userScore++
-        return "You won!"
-    }
 
-    if (userChoice === 'paper' && computerChoice === 'scissors') {
-        computerScore++
-        return "The computer won!"
-    } else if (userChoice === 'scissors' && computerChoice === 'paper') {
-        userScore++
-        return "You won!"
-    };
+// Creates DIV DOM
+const container = document.querySelector('#container');
+const resultDiv = document.createElement('div');
+resultDiv.style.marginTop = "20px";
+container.appendChild(resultDiv);
 
-};
+// Create player win tracking DOM
+const playerWinText = document.createElement('p');
+playerWinText.style.color ="green";
+playerWinText.textContent = "Your win totals: " + playerWin
+resultDiv.appendChild(playerWinText);
 
-let gameRound = 1;
+// Create Computer win track DOM
+const computerWinText = document.createElement('p');
+computerWinText.style.color = "red";
+computerWinText.textContent = "Computer's win totals: " + computerWin;
+resultDiv.appendChild(computerWinText);
 
-function playGame() {
-    if (gameRound <= 5) {
-        const userChoice = getUserChoice();
-        const computerChoice = getComputerChoice();
-        determineWinner(userChoice, computerChoice);
-        gameRound++;
-        console.log(`Your score is: ${userScore} Computer: ${computerScore}`)
-        playGame();
 
-    } else if (gameRound === 6) {
-        if (userScore > computerScore) {
-            console.log("You win!")
-        } else if (userScore < computerScore) {
-            console.log("You lose!")
-        } else {
-            console.log("Its a draw!");
-        }
-    }
-    const userChoice = getUserChoice();
-    const computerChoice = getComputerChoice();
-    console.log('You chose: ' + userChoice);
-    console.log('Computer chose: ' + computerChoice);
-    console.log(determineWinner(userChoice, computerChoice));
-};
+// Create battle win track DOM
+const battleWinText = document.createElement('p');
+battleWinText.style.color = "blue";
+battleWinText.textContent = "";
+resultDiv.appendChild(battleWinText);
 
-playGame();
-console.log("The score is: " + userScore + ":" + computerScore)
-console.log(calculateWinningScore(userScore, computerScore));
+// Create Game win text DOM
+const gameWinText = document.createElement('p');
+gameWinText.style.color = "orange";
+gameWinText.textContent = "";
+resultDiv.appendChild(gameWinText);
+
+// determine first to five
+function endGame() {
+    if (playerWin == 5) {
+        gameWinner = "You Win!"
+        gameWinText.textContent = gameWinner;
+        
+        //disable buttons
+        document.getElementById("1").disabled = true;
+        document.getElementById("2").disabled = true;
+        document.getElementById("3").disabled = true;
+        
+        //create new dom button for replaying
+        const playAgainButton = document.createElement("button");
+        playAgainButton.textContent = "Play Again!";
+        resultDiv.appendChild(playAgainButton);
+
+        //if clicked
+        playAgainButton.addEventListener('click', () => {
+            location.reload();
+
+        })
+
+    } else if (computerWin == 5) {
+        gameWinner = "You Lost!"
+        gameWinText.textContent = gameWinner;
+        
+        //disable buttons
+        document.getElementById("1").disabled = true;
+        document.getElementById("2").disabled = true;
+        document.getElementById("3").disabled = true;
+        
+        //create new dom button for replaying
+        const playAgainButton = document.createElement("button");
+        playAgainButton.textContent = "Play Again!";
+        resultDiv.appendChild(playAgainButton);
+
+        //if clicked
+        playAgainButton.addEventListener('click', () => {
+            location.reload();
+    });
+}
+
+}
+
